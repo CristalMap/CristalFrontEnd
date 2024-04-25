@@ -1,0 +1,202 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+  <div class="container-fluid">
+    <a class="navbar-brand" [routerLink]="['/mapa']">Cristal</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item" *ngIf="isLogged">
+          <button class="btn navbarItemMargin btn-primary btn-denuncia" (click)="abrirModal(template)">
+            Criar denúncia
+          </button>
+        </li>
+        <li class="nav-item dropdown" *ngIf="isLogged">
+          <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown"
+            aria-expanded="false">
+            <img src="{{usuario.foto}}" alt="Avatar" class="avatar-img">
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
+            <li>
+              <a class="dropdown-item" [routerLink]="['/perfil']">
+                <i class="bi bi-person-circle navbarItemMargin"></i>Perfil
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item" [routerLink]="['/minhas-denuncias']">
+                <i class="bi bi-journal-medical navbarItemMargin"></i>Minhas denúncias
+              </a>
+            </li>
+            <li *ngIf="usuario.administrador === true">
+              <a class="dropdown-item" [routerLink]="['/administrador']">
+                <i class="bi bi-tools navbarItemMargin"></i>Administrador
+              </a>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li>
+              <a class="dropdown-item navbarItemPointer" (click)="logout()">
+                <i class="bi bi-door-open navbarItemMargin"></i>Sair
+              </a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<ng-template #template>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Criar denúncia</h4>
+    <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="modalRef?.hide()">
+      <span aria-hidden="true" class="visually-hidden">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body criardenunciaModalCustom">
+    <form [formGroup]="formCriarDenuncia" (ngSubmit)="onSubmit()">
+      <div class="row">
+        <div class="col-7">
+          <div class="mb-3">
+            <input style="border-radius: 8px;" class="form-control criardenunciaInputColor" type="text"
+              formControlName="Titulo" placeholder="Titulo">
+          </div>
+          <div class="mb-3">
+            <textarea class="form-control criardenunciaInputColor" rows="7" placeholder="Descrição"
+              formControlName="Descricao"></textarea>
+          </div>
+          <div class="mb-3">
+            <input type="text" class="form-control criardenunciaInputColor" (keyup)="buscarEnderecos()"
+              placeholder="Endereço" formControlName="cadastrarDenunciaEnderecoDigitado">
+            <ul class="list-group" *ngIf="enderecos.length > 0">
+              <li class="list-group-item list-group-item-action p-0 m-0" *ngFor="let endereco of enderecos">
+                <button type="button" class="btn" (click)="selecionarEndereco(endereco)">
+                  <h5>{{endereco.text_es}}</h5>
+                  <p>{{endereco.place_name}}</p>
+                </button>
+              </li>
+            </ul>
+          </div>
+          <div class="mb-3">
+            <input (change)="selecionarFoto($event)" type="file" class="form-control" id="inputGroupFile04"
+              aria-describedby="inputGroupFileAddon04" aria-label="Upload">
+          </div>
+        </div>
+        <div class="col-5">
+          <div class="mb-3">
+            <div class="row mb-3">
+              <div class="col-3 img">
+                <img alt="Icone de mamífero" src="../../../../assets/images/icons-dog.png"
+                  class="criardenunciaimgTamanho" tooltip="Mamíferos são animais que têm pelos no corpo e geralmente dão à luz a filhotes. 
+                  Exemplos comuns são cães, gatos e ursos.">
+              </div>
+              <div class="col-9">
+                <h6>Mamíferos</h6>
+                <div class="row">
+                  <div class="col-5">
+                    <div class="contador">
+                      <input type="number" class="form-control criardenunciaInputColor" min="0"
+                        formControlName="QuantidadeMamiferos">
+                    </div>
+                  </div>
+                  <div class="col-7">
+                    <button type="button" class="btn contadorBotaoCorfundo" (click)="removerAnimais('mamiferos')">
+                      <i class="bi bi-trash3 me-2 contadorIconeColorroxo"></i>
+                      <span class="contadorRemoverFont"></span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="mb-3">
+            <div class="row mb-3">
+              <div class="col-3 img">
+                <img alt="Icone de aves" src="../../../../assets/images/icons-parrot.png"
+                  class="criardenunciaimgTamanho" tooltip="Aves são animais caracterizados por terem penas, asas e bicos. exemplos incluem 
+                  águias, pinguins e corujas.">
+              </div>
+              <div class="col-9">
+                <h6>Aves</h6>
+                <div class="row">
+                  <div class="col-5">
+                    <div class="contador">
+                      <input type="number" class="form-control criardenunciaInputColor" min="0"
+                        formControlName="QuantidadeAves">
+                    </div>
+                  </div>
+                  <div class="col-7">
+                    <button type="button" class="btn contadorBotaoCorfundo" (click)="removerAnimais('aves')">
+                      <i class="bi bi-trash3 me-2 contadorIconeColorroxo"></i>
+                      <span class="contadorRemoverFont"></span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="mb-3">
+            <div class="row mb-3">
+              <div class="col-3 img">
+                <img alt="Icone de répteis" src="../../../../assets/images/icone-cobra.png"
+                  class="criardenunciaimgTamanho" tooltip="Répteis são animais que possuem pele escamosa, geralmente botam ovos e respiram por 
+                  pulmões; exemplos são cobras, crocodilos e tartarugas.">
+              </div>
+              <div class="col-9">
+                <h6>Répteis</h6>
+                <div class="row">
+                  <div class="col-5">
+                    <div class="contador">
+                      <input type="number" class="form-control criardenunciaInputColor" min="0"
+                        formControlName="QuantidadeRepteis">
+                    </div>
+                  </div>
+                  <div class="col-7">
+                    <button type="button" class="btn contadorBotaoCorfundo" (click)="removerAnimais('repteis')">
+                      <i class="bi bi-trash3 me-2 contadorIconeColorroxo"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="mb-3">
+            <div class="row mb-3">
+              <div class="col-3 img">
+                <img alt="Icone de Peixes" src="../../../../assets/images/icons-peixe.png"
+                  class="criardenunciaimgTamanho" tooltip="Peixes são animais aquáticos respiram por brânquias e possuem nadadeiras. exemplos 
+                  são o salmão, o atum e o peixe-palhaço.">
+              </div>
+              <div class="col-9">
+                <h6>Peixes</h6>
+                <div class="row">
+                  <div class="col-5 m-contator">
+                    <div class="contador">
+                      <input type="number" class="form-control criardenunciaInputColor" min="0"
+                        formControlName="QuantidadePeixes">
+                    </div>
+                  </div>
+                  <div class="col-7">
+                    <button type="button" class="btn contadorBotaoCorfundo" (click)="removerAnimais('peixes')">
+                      <i class="bi bi-trash3 me-2 contadorIconeColorroxo"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="btn-footer1">
+          <button type="button" class="btn btn-danger" (click)="fecharModal(1)">Cancelar</button>
+        </div>
+        <div class="btn-footer2">
+          <button type="submit" class="btn btn-primary" [disabled]="!formCriarDenuncia.valid">Salvar</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</ng-template>

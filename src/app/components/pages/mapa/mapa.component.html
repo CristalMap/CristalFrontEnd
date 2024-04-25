@@ -1,0 +1,42 @@
+<div class="container-fluid m-container">
+  <div class="row">
+    <div class="map-container col-sm-12 col-lg-9">
+      <div class="map-container" id="map"></div>
+    </div>
+    <div class="map-frame d-none d-lg-block col-lg-3">
+      <div class="artigos-container">
+        <div class="titulo-e-botao">
+          <p class="h4 mt-3">Denúncias</p>
+          <button type="button" class="btn btn-light" (click)="minhaLocalizacao()" title="Minha localização">
+            <i class="bi bi-geo-alt"></i>
+          </button>
+        </div>
+        <div class="separador"></div>
+        <div class="artigos-area border-bottom">
+          <div class="card-container" *ngFor="let denuncia of denunciasAprovadas.denuncias">
+            <div class="card card-style">
+              <div class="card-body">
+                <img src="{{ denuncia.fotoBase64 }}" class="card-img-top img-fluid"
+                  alt="Foto denuncia" />
+                <h5>{{ denuncia.titulo }}</h5>
+                <p>{{ denuncia.descricao | slice : 0 : 100 }}
+                  <span *ngIf="denuncia.descricao.length > 100">...</span>
+                </p>
+                <div class="d-flex justify-content-between align-items-center footer">
+                  <button type="button" class="btn btn-primary" 
+                  (click)="irParaDenuncia(denuncia.endereco.longitude, denuncia.endereco.latitude)" title="Localização da denúncia">
+                    Localização
+                  </button>
+                  <p class="mb-0">Criado em:
+                    {{ denuncia.dataHoraCriacao | date : "dd/MM/yyyy" }}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="separador"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

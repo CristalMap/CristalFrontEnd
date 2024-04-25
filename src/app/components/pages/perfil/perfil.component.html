@@ -1,0 +1,168 @@
+<div class="pagetitle titulo-perfil">
+  <h2>Perfil</h2>
+</div>
+
+<section class="section profile perfil ">
+  <div class="row">
+    <div class="col-xl-4 ">
+      <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
+        <img [src]="usuario.foto" alt="Profile" class="rounded-circle img" width="100" height="100">
+        <h3>{{usuario.nome}}</h3>
+        <p>Pontos: {{usuario.pontos}}</p>
+      </div>
+    </div>
+
+    <div class="col-xl-6">
+      <h3 class="card-title mb-4">Detalhes do Perfil</h3>
+      <div class="accordion">
+        <div class="accordion-item">
+          <h4 class="accordion-header" id="flush-headingOne">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+              data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+              Informações
+            </button>
+          </h4>
+          <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne"
+            data-bs-parent="#accordionFlushExample">
+            <div class="accordion-body">
+              <div class="row">
+                <div class="col-4">
+                  <h5>Nome</h5>
+                </div>
+                <div class="col-8">
+                  <span>{{usuario.nome}}</span>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-4">
+                  <h5>Email</h5>
+                </div>
+                <div class="col-8">
+                  <span>{{usuario.email}}</span>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-4">
+                  <h5>Telefone</h5>
+                </div>
+                <div class="col-8">
+                  <span>{{usuario.telefone}}</span>
+                </div>
+              </div>
+              <div class="row text-end">
+                <div class="col-12">
+                  <div class="btn-group">
+                    <button type="button" class="btn btn-warning" (click)="abrirModal(template)">
+                      Editar
+                    </button>
+                    <button type="button" class="btn btn-danger ms-2" (click)="excluirConta()">
+                      Excluir conta
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <h4 class="accordion-header" id="flush-headingTwo">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+              data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+              Editar senha
+            </button>
+          </h4>
+          <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo"
+            data-bs-parent="#accordionFlushExample">
+            <div class="accordion-body">
+              <form [formGroup]="formEditarSenha" (ngSubmit)="onSubmitAtualizarSenha()">
+                <div class="mb-3">
+                  <label>Senha atual</label>
+                  <input class="form-control" type="password" placeholder="Senha atual" formControlName="senhaAtual">
+                </div>
+                <div class="mb-3">
+                  <label>Nova senha</label>
+                  <input class="form-control" type="password" placeholder="Nova senha" formControlName="senha">
+                </div>
+                <div class="mb-3">
+                  <label>confirmar nova senha</label>
+                  <input class="form-control" type="password" placeholder="Confirmar nova senha"
+                    formControlName="confirmarSenha">
+                </div>
+                <div class="row">
+                  <button type="submit" class="btn btn-primary col-2 ms-auto" [disabled]="!formEditarSenha.valid">
+                    <i class="bi bi-person-fill-lock informacoesIconMargin"></i>Salvar
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <h4 class="accordion-header" id="flush-headingThree">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+              data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
+              Editar foto
+            </button>
+          </h4>
+          <div id="flush-collapseThree" class="accordion-collapse collapse" aria-labelledby="flush-headingThree"
+            data-bs-parent="#accordionFlushExample">
+            <div class="accordion-body">
+              <div class="input-group">
+                <input (change)="selecionarFoto($event)" type="file" class="form-control" id="inputGroupFile04"
+                  aria-describedby="inputGroupFileAddon04" aria-label="Upload">
+                <button type="button" class="btn btn-primary col-2 ms-auto" (click)="enviarFotoUsuario()">
+                  <i class="bi bi-person-badge-fill informacoesIconMargin"></i>Salvar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <h4 class="accordion-header" id="flush-headingQuatro">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+              data-bs-target="#flush-collapseQuatro" aria-expanded="false" aria-controls="flush-collapseQuatro">
+              Estatísticas
+            </button>
+          </h4>
+          <div id="flush-collapseQuatro" class="accordion-collapse collapse" aria-labelledby="flush-headingQuatro"
+            data-bs-parent="#accordionFlushExample">
+            <div class="accordion-body">
+              <div>
+                <canvas #meucanvas></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<ng-template #template>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Editar informações</h4>
+    <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="modalRef?.hide()">
+      <span aria-hidden="true" class="visually-hidden">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="formEditarConta" (ngSubmit)="onSubmit()">
+      <div class="mb-3">
+        <label>Nome</label>
+        <input class="form-control" type="text" placeholder="Nome" formControlName="nome">
+      </div>
+      <div class="mb-3">
+        <label>Email</label>
+        <input class="form-control" type="email" placeholder="Email" formControlName="email">
+      </div>
+      <div class="mb-3">
+        <label>Telefone</label>
+        <input class="form-control" type="text" placeholder="Telefone" formControlName="telefone">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" (click)="fecharModal(1)">Cancelar</button>
+        <button type="submit" class="btn btn-primary" [disabled]="!formEditarConta.valid">Salvar</button>
+      </div>
+    </form>
+  </div>
+</ng-template>

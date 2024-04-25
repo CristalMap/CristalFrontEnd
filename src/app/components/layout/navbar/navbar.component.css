@@ -1,0 +1,125 @@
+.drop {
+    margin-right: 40px;
+    margin-left: 40px;
+}
+
+.btn-denuncia {
+    background: #193A6A;
+    color: #FFFFFF;
+}
+
+.navbarItemPointer {
+    cursor: pointer;
+}
+
+.navbarItemMargin {
+    margin-right: 5px;
+}
+
+.avatar-img {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
+}
+
+.criardenunciaimgTamanho {
+    width: 58px;
+    height: 68px;
+}
+
+.contador {
+    background-color: #E6E5E5;
+    width: 58px;
+}
+
+.contadorBotaoCorfundo {
+    background-color: #E6E5E5;
+}
+
+.contadorIconeColorroxo {
+    color: #8047F8;
+}
+
+.contadorRemoverFont {
+    color: #574F4D;
+}
+
+@media ( max-width: 2000px){
+    .contador {
+        background-color: #E6E5E5;
+        width: 78px;
+    }
+    .modal-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center; 
+      }
+}
+
+
+@media ( max-width: 1366px){
+    .contador {
+        background-color: #E6E5E5;
+        width: 58px;
+    }
+    .modal-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center; 
+      }
+}
+
+
+@media (max-width: 991px) {
+    .modal-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center; 
+    }
+  
+    .modal-footer button {
+      margin: 5px 0; 
+    }
+
+    .criardenunciaimgTamanho {
+        width: 35px;
+        height: 40px;
+    }
+
+    .img{
+        margin: 24px 0px 1px -6px;
+    }
+
+    .contador{
+        background-color: #E6E5E5;
+        width: 47px;
+        margin: 0px 13px 0px -1px;
+    }
+
+
+  }
+/* ... Seu CSS existente ... */
+
+.modal-columns {
+    display: flex;
+  }
+  
+  .modal-column-left,
+  .modal-column-right {
+    flex: 1;
+  }
+  
+  /* Ajuste para telas menores (por exemplo, menor que 768px) */
+  @media (max-width: 768px) {
+    .modal-columns {
+      flex-direction: column;
+    }
+  
+    .modal-column-left,
+    .modal-column-right {
+      width: 100%;
+    }
+  }
+  

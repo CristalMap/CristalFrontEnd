@@ -1,0 +1,21 @@
+/* Estilos para a barra de rolagem */
+body::-webkit-scrollbar {
+    width: 5px;
+  }
+  
+  body::-webkit-scrollbar-thumb {
+    background-color: #193A6A;
+    border-radius: 6px;
+  }
+  
+  body::-webkit-scrollbar-thumb:hover {
+    background-color: #142C4E;
+  }
+  
+  body::-webkit-scrollbar-track {
+    background-color: #f1f1f1;
+  }
+/*   
+  *{
+    overflow: hidden;
+  } */

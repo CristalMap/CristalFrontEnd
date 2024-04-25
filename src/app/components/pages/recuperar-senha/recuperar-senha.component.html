@@ -1,0 +1,37 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-5">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title text-center mb-4">Recuperar senha</h4>
+          <hr />
+          <div class="alert alert-success" role="alert" *ngIf="mensagemSucesso !== ''">
+            {{mensagemSucesso}}
+          </div>
+          <div class="alert alert-danger" role="alert" *ngIf="mensagemErro !== ''">
+            {{mensagemErro}}
+          </div>
+          <form [formGroup]="formRecuperarSenha" (ngSubmit)="onSubmit()">
+            <div class="form-group">
+              <label class="m-email" for="formEmailCriar ">Digite seu e-mail:</label>
+              <input type="email" class="form-control" id="formEmailCriar" aria-describedby="emailHelp"
+                placeholder="Exemplo: cristalMap@outlook.com" formControlName="email">
+              <div *ngIf="form.email.touched && form.email.invalid">
+                <span class="text-danger" *ngIf="form.email.errors.required">
+                  Por favor, informe o email.
+                </span>
+                <span class="text-danger" *ngIf="form.email.errors.email">
+                  Por favor, informe um endereço de email válido.
+                </span>
+              </div>
+            </div>
+            <button type="submit" class="login-button" [disabled]="!formRecuperarSenha.valid">Enviar</button>
+          </form>
+          <div class="text-center mt-3 back-button">
+            <a [routerLink]="['/autenticar']">Voltar</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

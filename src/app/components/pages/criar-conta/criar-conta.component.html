@@ -1,0 +1,87 @@
+<div class="login-container">
+  <div class="left-panel">
+    <div class="background-layer1"></div>
+    <div class="background-layer2"></div>
+  </div>
+  <!-- <div class="vertical-separator"></div> -->
+  <div class="right-panel">
+    <div class="logo-container">
+      <img src="../../../../assets/images/logoCristal.png" alt="Logo">
+    </div>
+    <form class="form-login" [formGroup]="formCriarConta" (ngSubmit)="onSubmit()">
+      <div class="input-group">
+        <label for="name">Nome</label>
+        <input style="border-radius: 8px;" class="border-input" type="text" placeholder="Digite seu nome"
+          formControlName="nome">
+        <div *ngIf="form.nome.touched && form.nome.invalid">
+          <span class="text-danger" *ngIf="form.nome.errors.required">
+            Por favor, informe o nome.
+          </span>
+          <span class="text-danger" *ngIf="form.nome.errors.pattern">
+            Por favor, informe um nome válido.
+          </span>
+        </div>
+      </div>
+      <div class="input-group">
+        <label for="email">E-mail</label>
+        <input style="border-radius: 8px;" class="border-input" type="email" placeholder="Digite seu e-mail"
+          formControlName="email">
+        <div *ngIf="form.email.touched && form.email.invalid">
+          <span class="text-danger" *ngIf="form.email.errors.required">
+            Por favor, informe o email.
+          </span>
+          <span class="text-danger" *ngIf="form.email.errors.email">
+            Por favor, informe um endereço de email válido.
+          </span>
+        </div>
+      </div>
+      <div class="input-group">
+        <label for="telefone">Telefone</label>
+        <input style="border-radius: 8px;" class="border-input" type="text" placeholder="Digite seu telefone"
+          formControlName="telefone">
+        <div *ngIf="form.telefone.touched && form.telefone.invalid">
+          <span class="text-danger" *ngIf="form.telefone.errors.required">
+            Por favor, informe o telefone.
+          </span>
+          <span class="text-danger" *ngIf="form.telefone.errors.pattern">
+            Por favor, informe um telefone válido.
+          </span>
+        </div>
+      </div>
+      <div class="input-group">
+        <div class="input-item">
+          <label for="password">Senha</label>
+          <input style="border-radius: 8px;" class="border-input" type="password" placeholder="Digite sua senha"
+            formControlName="senha"
+            tooltip="A senha deve conter pelo menos 8 caracteres, incluindo maiúsculas, minúsculas, números e caracteres especiais."/>
+          <div *ngIf="form.senha.touched && form.senha.invalid">
+            <span class="text-danger" *ngIf="form.senha.errors.required">Por favor, informe a senha.</span>
+            <span class="text-danger" *ngIf="form.senha.errors.pattern">Por favor, informe uma senha válida.</span>
+          </div>
+        </div>
+        <div class="input-item">
+          <label for="passwordConfirm">Confirme a senha</label>
+          <input style="border-radius: 8px;" class="border-input" type="password" placeholder="Digite sua senha"
+            formControlName="senhaConfirmacao">
+          <div *ngIf="form.senhaConfirmacao.touched && form.senhaConfirmacao.invalid">
+            <span class="text-danger" *ngIf="form.senhaConfirmacao.errors.required">Por favor, informe a confirmação de
+              senha.</span>
+            <span class="text-danger" *ngIf="form.senhaConfirmacao.errors.pattern">Por favor, informe uma senha
+              válida.</span>
+          </div>
+        </div>
+      </div>
+
+      <button type="submit" class="login-button" [disabled]="!formCriarConta.valid || isLoadingCadastro">
+        <span *ngIf="!isLoadingCadastro">Cadastrar</span>
+        <span *ngIf="isLoadingCadastro" class="fa fa-circle-o-notch fa-spin fa-1x fa-fw"></span>
+      </button>
+    </form>
+    <div class="back-btn">
+      <a [routerLink]="['/autenticar']" class="forgot-password-link mt-2">Voltar para o Login</a>
+    </div>
+    <div class="back-btn">
+      <a [routerLink]="['/home']" class="forgot-password-link mt-2">Voltar para a home</a>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,319 @@
+<div class="admin-container">
+  <ul class="nav nav-tabs" id="myTab" role="tablist">
+    <li class="nav-item" role="presentation">
+      <button class="nav-link active" id="usuario-tab" data-bs-toggle="tab" data-bs-target="#usuario-tab-pane"
+        type="button" role="tab" aria-controls="usuario-tab-pane" aria-selected="true"
+        (click)="FiltrarEpaginarUsuarios()">
+        Usuários
+      </button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="denuncia-tab" data-bs-toggle="tab" data-bs-target="#denuncia-tab-pane" type="button"
+        role="tab" aria-controls="denuncia-tab-pane" aria-selected="false" (click)="FiltrarEpaginarDenuncias()">
+        Denúncias
+      </button>
+    </li>
+  </ul>
+  <div class="tab-content" id="myTabContent">
+    <div class="tab-pane fade show active" id="usuario-tab-pane" role="tabpanel" aria-labelledby="usuario-tab"
+      tabindex="0">
+      <form class="mb-3 mt-3" [formGroup]="formFiltrarEpaginarUsuarios" (ngSubmit)="onSubmit()">
+        <div class="row">
+          <div class="col-md-4">
+            <label class="form-label">Nome</label>
+            <input type="text" class="form-control" placeholder="Nome" formControlName="Nome" />
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Email</label>
+            <input type="email" class="form-control" placeholder="Email" formControlName="Email" />
+          </div>
+        </div>
+        <div class="text-end mt-2">
+          <button type="button" class="btn btn-secondary mx-2" (click)="limparFiltros()">
+            Limpar
+          </button>
+          <button type="submit" class="btn btn-primary" [disabled]="!formFiltrarEpaginarUsuarios.valid">
+            Buscar
+          </button>
+        </div>
+      </form>
+      <div class="row" *ngIf="listaUsuarios.usuarios.length > 0">
+        <div class="col-md-3 col-lg-4 mt-3" *ngFor="let item of listaUsuarios.usuarios">
+          <div class="card mb-3 card-w">
+            <div class="img-size">
+              <img src="{{ item.foto }}" class="card-img-top img-fluid card--img" alt="Foto usuario" />
+            </div>
+            <div class="card-body">
+              <h5 class="card-title">{{ item.nome }}</h5>
+              <p class="card-text">Email: {{ item.email }}</p>
+              <p class="card-text">Telefone: {{ item.telefone }}</p>
+              <p class="card-text">Pontos: {{ item.pontos }}</p>
+              <p class="card-text">
+                Administrador: {{ item.administrador ? "Sim" : "Não" }}
+              </p>
+              <p class="card-text">
+                Criado em:
+                {{ item.dataHoraCriacao | date : "dd/MM/yyyy" }}
+              </p>
+            </div>
+            <div class="card-footer">
+              <button type="button" class="btn btn-sm btn-warning" (click)="abrirModal(template, item)">
+                <i class="bi bi-person-fill-gear informacoesIconMargin"></i>Editar
+              </button>
+              <button type="button" class="btn btn-sm btn-danger" (click)="excluirConta(item.guid)">
+                <i class="bi bi-person-x-fill informacoesIconMargin"></i>Excluir
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="d-flex justify-content-center align-items-center fixed-pagination"
+        *ngIf="listaUsuarios.usuarios.length > 0">
+        <pagination [totalItems]="totalItemsPaginacao" [itemsPerPage]="12" (pageChanged)="mudarPaginaAtual($event)">
+        </pagination>
+      </div>
+    </div>
+    <div class="tab-pane fade" id="denuncia-tab-pane" role="tabpanel" aria-labelledby="denuncia-tab" tabindex="0">
+      <form class="mb-3 mt-3" [formGroup]="formFiltrarEpaginarDenuncias" (ngSubmit)="onSubmitDenuncias()">
+        <div class="row">
+          <div class="col-md-4">
+            <label class="form-label">Titulo</label>
+            <input type="text" class="form-control" placeholder="Titulo" formControlName="Titulo" />
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Status</label>
+            <select class="form-select" aria-label="Default select example" formControlName="Status">
+              <option value="" [selected]="true">Selecione uma opção</option>
+              <option value="0">Pendente</option>
+              <option value="1">Aprovada</option>
+              <option value="2">Reprovada</option>
+            </select>
+          </div>
+        </div>
+        <div class="text-end mt-2">
+          <button type="button" class="btn btn-secondary mx-2" (click)="limparFiltros()">
+            Limpar
+          </button>
+          <button type="submit" class="btn btn-primary" [disabled]="!formFiltrarEpaginarDenuncias.valid">
+            Buscar
+          </button>
+        </div>
+      </form>
+      <div class="row" *ngIf="listaDenuncias.denuncias.length > 0">
+        <div class="col-md-3 col-lg-4 mt-3" *ngFor="let item of listaDenuncias.denuncias">
+          <div class="card mb-3 card-w">
+            <div class="img-size">
+              <img src="{{ item.fotoBase64 }}" class="card-img-top img-fluid" alt="Foto usuario" />
+            </div>
+            <div class="card-body">
+              <h5 class="card-title">{{ item.titulo }}</h5>
+              <p>
+                {{ item.descricao | slice : 0 : 100 }}
+                <span *ngIf="item.descricao.length > 100">...</span>
+              </p>
+              <p class="card-text">Status: {{ item.status }}</p>
+              <p class="card-text">
+                Criado em: {{ item.dataHoraCriacao | date : "dd/MM/yyyy" }}
+              </p>
+              <p class="card-text">
+                Criado por: {{ item.usuario.email }}
+              </p>
+            </div>
+            <div class="card-footer">
+              <button class="btn btn-sm btn-success" (click)="abrirSegundaModal(secondTemplate, item)">
+                Ver mais detalhes <i class="bi bi-box-arrow-up-right"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="d-flex justify-content-center align-items-center fixed-pagination"
+        *ngIf="listaDenuncias.denuncias.length > 0">
+        <pagination [totalItems]="totalItemsPaginacao" [itemsPerPage]="12"
+          (pageChanged)="mudarPaginaAtualDenuncia($event)">
+        </pagination>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #template>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Editar perfil</h4>
+    <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="modalRef?.hide()">
+      <span aria-hidden="true" class="visually-hidden">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="formEditarConta" (ngSubmit)="editarConta()">
+      <div class="mb-3">
+        <label>Nome</label>
+        <input class="form-control" type="text" placeholder="Nome" formControlName="nome" />
+      </div>
+      <div class="mb-3">
+        <label>Email</label>
+        <input class="form-control" type="email" placeholder="Email" formControlName="email" />
+      </div>
+      <div class="mb-3">
+        <label>Telefone</label>
+        <input class="form-control" type="text" placeholder="Telefone" formControlName="telefone" />
+      </div>
+      <div class="mb-3">
+        <label class="form-check-label">Administrador</label>
+        <div class="form-check form-switch">
+          <input class="form-check-input" type="checkbox" formControlName="Administrador" />
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" style="margin-right: auto" (click)="fecharModal(1)">
+          Cancelar
+        </button>
+        <button type="submit" class="btn btn-primary" [disabled]="!formEditarConta.valid">
+          Salvar
+        </button>
+      </div>
+    </form>
+  </div>
+</ng-template>
+
+<ng-template #secondTemplate>
+  <div class="modal-header criardenunciaModalCustom">
+    <h4 class="modal-title pull-left">Denúncias</h4>
+    <button type="button" class="btn-close close pull-right" aria-label="Close" (click)="modalRef?.hide()">
+      <span aria-hidden="true" class="visually-hidden">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body criardenunciaModalCustom">
+    <form>
+      <div class="row m-r">
+        <div class="col-7">
+          <div class="mb-3">
+            <input style="border-radius: 8px" class="form-control criardenunciaInputColor" type="text"
+              value="{{ denunciaModal.titulo }}" placeholder="Titulo" [disabled]="true" />
+          </div>
+          <div class="mb-3">
+            <textarea class="form-control criardenunciaInputColor" rows="7" placeholder="Descrição"
+              value="{{ denunciaModal.descricao }}" [disabled]="true"></textarea>
+          </div>
+          <div class="mb-3">
+            <input type="text" class="form-control criardenunciaInputColor" placeholder="Status"
+              value="{{ denunciaModal.status }}" [disabled]="true" />
+          </div>
+          <div class="mb-3">
+            <input type="text" class="form-control criardenunciaInputColor" placeholder="Endereço"
+              value="{{ denunciaModal.endereco.nome }}" [disabled]="true" />
+          </div>
+          <div class="mb-3">
+            <a href="{{ denunciaModal.fotoBase64 }}" download class="btn btn-primary">
+              <i class="bi bi-download"></i> Baixar foto
+            </a>
+          </div>
+          <div class="mb-3"></div>
+        </div>
+        <div class="col-5">
+          <div class="mb-3">
+            <div class="row mb-3">
+              <div class="col-3 img">
+                <img alt="Icone de mamífero" src="../../../../assets/images/icons-dog.png"
+                  class="criardenunciaimgTamanho" tooltip="Mamíferos são animais que têm pelos no corpo e geralmente dão à luz a filhotes. 
+                  Exemplos comuns são cães, gatos e ursos." style="width: 58px; height: 68px" />
+              </div>
+              <div class="col-9">
+                <h6>Mamíferos</h6>
+                <div class="row">
+                  <div class="col-5">
+                    <div class="contador">
+                      <input type="number" class="form-control criardenunciaInputColor" min="0"
+                        value="{{ denunciaModal.quantidadeMamiferos }}" [disabled]="true" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="mb-3">
+            <div class="row mb-3">
+              <div class="col-3 img">
+                <img alt="Icone de aves" src="../../../../assets/images/icons-parrot.png"
+                  class="criardenunciaimgTamanho" tooltip="Aves são animais caracterizados por terem penas, asas e bicos. exemplos incluem 
+                  águias, pinguins e corujas." style="width: 58px; height: 68px" />
+              </div>
+              <div class="col-9">
+                <h6>Aves</h6>
+                <div class="row">
+                  <div class="col-5">
+                    <div class="contador">
+                      <input type="number" class="form-control criardenunciaInputColor" min="0"
+                        value="{{ denunciaModal.quantidadeAves }}" [disabled]="true" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="mb-3">
+            <div class="row mb-3">
+              <div class="col-3 img">
+                <img alt="Icone de répteis" src="../../../../assets/images/icone-cobra.png"
+                  class="criardenunciaimgTamanho" tooltip="Répteis são animais que possuem pele escamosa, geralmente botam ovos e respiram por 
+                  pulmões; exemplos são cobras, crocodilos e tartarugas." style="width: 58px; height: 68px" />
+              </div>
+              <div class="col-9">
+                <h6>Répteis</h6>
+                <div class="row">
+                  <div class="col-5">
+                    <div class="contador">
+                      <input type="number" class="form-control criardenunciaInputColor" min="0"
+                        value="{{ denunciaModal.quantidadeRepteis }}" [disabled]="true" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="mb-3">
+            <div class="row mb-3">
+              <div class="col-3 img">
+                <img alt="Icone de Peixes" src="../../../../assets/images/icons-peixe.png"
+                  class="criardenunciaimgTamanho" tooltip="Peixes são animais aquáticos respiram por brânquias e possuem nadadeiras. exemplos 
+                  são o salmão, o atum e o peixe-palhaço." style="width: 58px; height: 68px" />
+              </div>
+              <div class="col-9">
+                <h6>Peixes</h6>
+                <div class="row">
+                  <div class="col-5 m-contator">
+                    <div class="contador">
+                      <input type="number" class="form-control criardenunciaInputColor" min="0"
+                        value="{{ denunciaModal.quantidadePeixes }}" [disabled]="true" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger close" (click)="fecharModal(2)" style="margin-right: auto">
+          Fechar
+        </button>
+        <button type="button" class="btn btn-success" (click)="mudarStatusDenuncia(1, denunciaModal.guid)"
+          *ngIf="denunciaModal.status === 'Pendente'">
+          Aprovar
+        </button>
+        <button type="button" class="btn btn-warning" (click)="mudarStatusDenuncia(2, denunciaModal.guid)"
+          *ngIf="denunciaModal.status === 'Pendente'">
+          Reprovar
+        </button>
+        <button type="button" class="btn btn-warning" (click)="mudarStatusDenuncia(0, denunciaModal.guid)"
+        *ngIf="denunciaModal.status === 'Aprovada'">
+        Voltar pendente
+      </button>
+        <button type="button" class="btn btn-danger" (click)="excluirDenuncia(denunciaModal.guid)"
+          *ngIf="denunciaModal.status === 'Reprovada'">
+          Excluir
+        </button>
+      </div>
+    </form>
+  </div>
+</ng-template>

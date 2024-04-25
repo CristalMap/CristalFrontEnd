@@ -1,0 +1,60 @@
+.admin-container {
+  margin: 83px 50px 0px 50px;
+}
+
+.card-w {
+  height: 316px;
+}
+
+.card-body {
+  font-size: 12px;
+}
+
+.card-text {
+  margin-bottom: 1px;
+}
+
+.img-size img {
+  height: 102px;
+  object-fit: cover;
+}
+
+.card-footer {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: flex-start;
+  align-items: center;
+  margin: -67px 1px -7px 0px;
+}
+
+.card-footer button {
+  margin: 5px;
+}
+
+.informacoesIconMargin {
+  margin-right: 5px;
+}
+
+.card-footer {
+  display: flex;
+  justify-content: center;
+}
+
+@media (max-width:575px) {
+
+  .contador {
+    margin-left: 41px;
+  }
+
+  .contador input {
+    width: 53px;
+  }
+
+  .col-9 h6 {
+    margin-bottom: 22px;
+  }
+
+  .img {
+    margin-top: 18px;
+  }
+}

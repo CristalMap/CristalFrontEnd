@@ -1,0 +1,51 @@
+<div class="login-container">
+  <div class="left-panel">
+    <div class="background-layer1"></div>
+    <div class="background-layer2"></div>
+  </div>
+  <!-- <div class="vertical-separator"></div> -->
+  <div class="right-panel">
+    <div class="logo-container">
+      <img src="../../../../assets/images/logoCristal.png" alt="Logo Cristal">
+    </div>
+    <div class="alert alert-danger" role="alert" *ngIf="mensagemErro !== ''">
+      {{mensagemErro}}
+    </div>
+    <form class="form-login" [formGroup]="formAutenticar" (ngSubmit)="onSubmit()">
+      <div class="input-group">
+        <label for="FormLoginEmail" class="form-label">E-mail</label>
+        <input id="FormLoginEmail" style="border-radius: 8px;" class="border-input" type="email"
+          placeholder="Digite seu e-mail" formControlName="email">
+        <div *ngIf="form.email.touched && form.email.invalid">
+          <span class="text-danger" *ngIf="form.email.errors.required">
+            Por favor, informe o email.
+          </span>
+          <span class="text-danger" *ngIf="form.email.errors.email">
+            Por favor, informe um endereço de email válido.
+          </span>
+        </div>
+      </div>
+      <div class="input-group">
+        <label for="FormLoginSenha" class="form-label">Senha</label>
+        <input id="FormLoginSenha" style="border-radius: 8px;" class="border-input" type="password"
+          placeholder="Digite sua senha" formControlName="senha">
+          <div *ngIf="form.senha.touched && form.senha.invalid">
+            <span class="text-danger" *ngIf="form.senha.errors.required">
+              Por favor, informe a senha.
+            </span>
+          </div>
+      </div>
+      <button type="submit" [disabled]="isLoading"  class="login-button" >
+        <i *ngIf="isLoading" class="fa fa-circle-o-notch fa-spin fa-1x fa-fw"></i>
+        <span class="sr-only">Loading...</span>
+        <span *ngIf="!isLoading">Entrar</span>
+      </button>
+      
+    </form>
+    <div class="register">
+      <p>Não tem uma conta ?<a [routerLink]="['/criar-conta']" class="forgot-password-link">Cadastre-se</a></p>
+      <p>Esqueceu a senha ?<a [routerLink]="['/recuperar-senha']" class="forgot-password-link">Recuperar senha</a></p>
+      <a [routerLink]="['/home']" class="forgot-password-link">Voltar para a Home</a>
+    </div>
+  </div>
+</div>
